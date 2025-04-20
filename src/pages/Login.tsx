@@ -1,6 +1,7 @@
 
 import { useApp } from "@/context/AppContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,11 +10,19 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, Key, KeyRound, Building2, Package2, Users } from "lucide-react";
 
 export default function Login() {
-  const { login } = useApp();
+  const { login, isAuthenticated } = useApp();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if user is already authenticated and redirect
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,6 +35,8 @@ export default function Login() {
           title: "Logged in successfully",
           description: "Welcome back to TransparentChain!",
         });
+        // Explicitly redirect after successful login
+        navigate("/");
       } else {
         toast({
           title: "Login failed",
