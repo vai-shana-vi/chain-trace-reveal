@@ -52,6 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				blockchain: {
+					DEFAULT: '#1A1F2C',
+					light: '#2A3042',
+					blue: '#0EA5E9',
+					teal: '#0D9488',
+					success: '#22C55E',
+					warning: '#F59E0B',
+					danger: '#EF4444'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
