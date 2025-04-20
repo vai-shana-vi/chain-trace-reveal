@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserRole, Product, ProductEvent, BlockchainTransaction } from '@/lib/types';
 import { users, products, generateProductEvents, generateTransactions } from '@/lib/mockData';
+import { generateHash, generateSecureProductId, verifyProductAuthenticity } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface AppContextType {
   // Authentication
@@ -14,6 +16,7 @@ interface AppContextType {
   products: Product[];
   addProduct: (product: Omit<Product, 'id' | 'hash'>) => Promise<Product>;
   getProduct: (id: string) => Product | undefined;
+  verifyProduct: (id: string) => { authentic: boolean; confidence: number; reason?: string };
   
   // Events
   getProductEvents: (productId: string) => ProductEvent[];
@@ -34,6 +37,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [productsList, setProductsList] = useState<Product[]>(products);
   const [transactionsList, setTransactionsList] = useState<BlockchainTransaction[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const { toast } = useToast();
   
   // Load transactions on mount
   useEffect(() => {
@@ -84,18 +88,41 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return productsList.find(product => product.id === id);
   };
   
+  // Verify product authenticity
+  const verifyProduct = (id: string) => {
+    const product = getProduct(id);
+    if (!product) {
+      return {
+        authentic: false,
+        confidence: 0,
+        reason: "Product not found"
+      };
+    }
+    
+    const events = getProductEvents(id);
+    return verifyProductAuthenticity(product, events);
+  };
+  
   // Add new product
   const addProduct = async (productData: Omit<Product, 'id' | 'hash'>): Promise<Product> => {
-    // Generate product ID and hash
-    const newId = `PRD${String(productsList.length + 1).padStart(3, '0')}`;
+    // Generate secure product ID
+    const newId = generateSecureProductId();
+    
+    // Generate a unique blockchain hash for this product
+    const uniqueData = `${newId}:${JSON.stringify(productData)}:${Date.now()}`;
+    const productHash = generateHash(uniqueData);
     
     // In a real app, this would be handled by the blockchain
-    // For demo, we'll just simulate creating a product
     const newProduct: Product = {
       ...productData,
       id: newId,
-      hash: `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`,
+      hash: productHash,
     };
+    
+    toast({
+      title: "Product Added",
+      description: "New product has been added to the blockchain",
+    });
     
     setProductsList(prevProducts => [...prevProducts, newProduct]);
     return newProduct;
@@ -114,6 +141,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     products: productsList,
     addProduct,
     getProduct,
+    verifyProduct,
     getProductEvents,
     transactions: transactionsList,
     sidebarOpen,
