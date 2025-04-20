@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { Mail, Key, KeyRound, Building2, Package2, Users } from "lucide-react";
 
 export default function Login() {
   const { login } = useApp();
@@ -45,79 +46,133 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-secondary p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">TransparentChain</h1>
-          <p className="text-muted-foreground">Blockchain supply chain transparency platform</p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-background to-secondary/50">
+      <div className="w-full max-w-md space-y-8 px-4">
+        {/* Logo and Title */}
+        <div className="text-center space-y-2">
+          <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-primary mx-auto">
+            <Package2 className="w-8 h-8 text-primary-foreground" />
+          </div>
+          <h1 className="text-3xl font-bold tracking-tight">TransparentChain</h1>
+          <p className="text-muted-foreground">
+            Blockchain supply chain transparency platform
+          </p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
+        <Card className="border-2">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">Sign in</CardTitle>
             <CardDescription>
-              Enter your credentials to access your account
+              Choose a demo account to explore the platform
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-9"
+                    required
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="text-sm text-primary hover:text-primary/90"
-                  >
-                    Forgot your password?
-                  </a>
+                  <Button variant="link" className="px-0 font-normal">
+                    Forgot password?
+                  </Button>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <Key className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-9"
+                    required
+                  />
+                </div>
               </div>
               
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+                {isLoading ? (
+                  <>Loading...</>
+                ) : (
+                  <>
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    Sign In
+                  </>
+                )}
               </Button>
             </form>
             
-            <div className="mt-6 text-center text-sm">
-              <p className="text-muted-foreground">
-                Demo accounts (use any email):
-              </p>
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                <div className="text-xs p-2 bg-secondary rounded">
-                  <div className="font-medium">Admin</div>
-                  <div>admin@transparentchain.com</div>
+            <div className="mt-8 space-y-4">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
                 </div>
-                <div className="text-xs p-2 bg-secondary rounded">
-                  <div className="font-medium">Manufacturer</div>
-                  <div>manufacturer@transparentchain.com</div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">
+                    Demo Accounts
+                  </span>
                 </div>
-                <div className="text-xs p-2 bg-secondary rounded">
-                  <div className="font-medium">Supplier</div>
-                  <div>supplier@transparentchain.com</div>
-                </div>
-                <div className="text-xs p-2 bg-secondary rounded">
-                  <div className="font-medium">Customer</div>
-                  <div>customer@example.com</div>
-                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <Card className="p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <Building2 className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Admin</p>
+                      <p className="text-xs text-muted-foreground">admin@transparentchain.com</p>
+                    </div>
+                  </div>
+                </Card>
+                <Card className="p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <Package2 className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Manufacturer</p>
+                      <p className="text-xs text-muted-foreground">manufacturer@transparentchain.com</p>
+                    </div>
+                  </div>
+                </Card>
+                <Card className="p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <Building2 className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Supplier</p>
+                      <p className="text-xs text-muted-foreground">supplier@transparentchain.com</p>
+                    </div>
+                  </div>
+                </Card>
+                <Card className="p-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <Users className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Customer</p>
+                      <p className="text-xs text-muted-foreground">customer@example.com</p>
+                    </div>
+                  </div>
+                </Card>
               </div>
             </div>
           </CardContent>
