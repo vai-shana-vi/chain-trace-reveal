@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -7,12 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { CheckCircle2, Package, QrCode, Search } from "lucide-react";
 import { useState } from "react";
+import CreateProductDialog from "@/components/CreateProductDialog";
 
 export default function Products() {
   const { products } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
   
-  // Filter products by search term
   const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     product.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -40,10 +39,7 @@ export default function Products() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <Button>
-            <Package className="mr-2 h-4 w-4" />
-            Add Product
-          </Button>
+          <CreateProductDialog />
         </div>
       </div>
 
