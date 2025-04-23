@@ -1,15 +1,20 @@
 
 import { useApp } from "@/context/AppContext";
+import { useWeb3 } from "@/context/Web3Context";
 import { formatDate, verifyHashChain } from "@/lib/utils";
-import { ArrowLeft, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Clock, XCircle, Shield, Loader2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { QRCodeSVG } from "qrcode.react";
+import { useState } from "react";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { getProduct, getProductEvents } = useApp();
+  const { verifyProductOnChain, isConnected } = useWeb3();
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [onChainVerified, setOnChainVerified] = useState<boolean | null>(null);
   
   const product = getProduct(id || "");
   const events = product ? getProductEvents(product.id) : [];
@@ -32,6 +37,19 @@ export default function ProductDetail() {
       </div>
     );
   }
+
+  const handleBlockchainVerify = async () => {
+    setIsVerifying(true);
+    try {
+      const result = await verifyProductOnChain(product.id);
+      setOnChainVerified(result);
+    } catch (error) {
+      console.error("Verification error:", error);
+      setOnChainVerified(false);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   return (
     <div className="space-y-6 animate-slide-in">
@@ -57,6 +75,20 @@ export default function ProductDetail() {
             <div className="badge-error">
               <XCircle className="mr-1 h-3 w-3" />
               Invalid
+            </div>
+          )}
+          
+          {onChainVerified === true && (
+            <div className="badge-verified bg-green-500/20 text-green-600 dark:text-green-400 px-2 py-1 rounded-full text-xs flex items-center">
+              <Shield className="mr-1 h-3 w-3" />
+              On-chain Verified
+            </div>
+          )}
+          
+          {onChainVerified === false && (
+            <div className="badge-error bg-red-500/20 text-red-600 dark:text-red-400 px-2 py-1 rounded-full text-xs flex items-center">
+              <XCircle className="mr-1 h-3 w-3" />
+              On-chain Invalid
             </div>
           )}
         </div>
@@ -106,6 +138,25 @@ export default function ProductDetail() {
                 </div>
               </div>
             </CardContent>
+            <CardFooter>
+              <Button
+                onClick={handleBlockchainVerify}
+                disabled={isVerifying || !isConnected}
+                className="w-full"
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Verifying on Blockchain...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="mr-2 h-4 w-4" />
+                    {isConnected ? 'Verify on Blockchain' : 'Connect Wallet to Verify'}
+                  </>
+                )}
+              </Button>
+            </CardFooter>
           </Card>
 
           <Card>

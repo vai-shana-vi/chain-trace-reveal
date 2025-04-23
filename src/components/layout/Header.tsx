@@ -5,8 +5,7 @@ import {
   Bell, 
   Menu, 
   MoonStar, 
-  Sun, 
-  Wallet 
+  Sun
 } from "lucide-react";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,9 +19,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/hooks/use-theme";
+import Web3ConnectButton from "@/components/Web3ConnectButton";
 
 export function Header() {
-  const { currentUser, setSidebarOpen } = useApp();
+  const { currentUser, setSidebarOpen, logout } = useApp();
   const { theme, setTheme } = useTheme();
   const [notifications] = useState(3);
 
@@ -44,11 +44,8 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Wallet Address */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary">
-          <Wallet size={16} className="text-primary" />
-          <span className="text-xs font-medium">{formatAddress(currentUser.walletAddress || '')}</span>
-        </div>
+        {/* Web3 Connect Button */}
+        <Web3ConnectButton variant="outline" />
         
         {/* Theme Toggle */}
         <Button 
@@ -91,7 +88,7 @@ export function Header() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => {}}>
+            <DropdownMenuItem onClick={() => logout()}>
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
