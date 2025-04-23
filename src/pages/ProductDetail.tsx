@@ -1,7 +1,6 @@
-
 import { useParams } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
-import { formatDate } from "@/lib/utils";
+import { formatDate, generateQRCodeURL } from "@/lib/utils";
 import CryptoPayment from "@/components/CryptoPayment";
 import QRScanner from "@/components/QRScanner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +8,7 @@ import { Package, Tag, Scan } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
@@ -43,7 +43,7 @@ export default function ProductDetail() {
         </Dialog>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle>Product Information</CardTitle>
@@ -63,6 +63,26 @@ export default function ProductDetail() {
               <p>Created: {formatDate(product.created)}</p>
               <p>Status: {product.status}</p>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Product QR Code</CardTitle>
+            <CardDescription>Scan to verify product status</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center justify-center space-y-4 p-6">
+            <div className="bg-white p-4 rounded-lg">
+              <QRCodeSVG 
+                value={window.location.href}
+                size={200}
+                level="H"
+                includeMargin={true}
+              />
+            </div>
+            <p className="text-sm text-muted-foreground text-center">
+              Current Status: <span className="font-medium capitalize">{product.status.replace('_', ' ')}</span>
+            </p>
           </CardContent>
         </Card>
 
