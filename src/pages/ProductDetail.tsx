@@ -3,13 +3,18 @@ import { useParams } from "react-router-dom";
 import { useApp } from "@/context/AppContext";
 import { formatDate } from "@/lib/utils";
 import CryptoPayment from "@/components/CryptoPayment";
+import QRScanner from "@/components/QRScanner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Tag } from "lucide-react";
+import { Package, Tag, Scan } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { getProduct } = useApp();
   const product = getProduct(id!);
+  const [showScanner, setShowScanner] = useState(false);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -20,9 +25,22 @@ export default function ProductDetail() {
 
   return (
     <div className="space-y-6 animate-slide-in">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
-        <p className="text-muted-foreground mt-1">Product Details</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
+          <p className="text-muted-foreground mt-1">Product Details</p>
+        </div>
+        <Dialog open={showScanner} onOpenChange={setShowScanner}>
+          <DialogTrigger asChild>
+            <Button variant="outline">
+              <Scan className="mr-2 h-4 w-4" />
+              Scan QR
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <QRScanner onClose={() => setShowScanner(false)} />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

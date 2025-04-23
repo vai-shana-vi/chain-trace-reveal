@@ -1,16 +1,20 @@
+
 import { useApp } from "@/context/AppContext";
 import { formatDate } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CheckCircle2, Package, QrCode, Search } from "lucide-react";
+import { CheckCircle2, Package, QrCode, Search, Scan } from "lucide-react";
 import { useState } from "react";
 import CreateProductDialog from "@/components/CreateProductDialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import QRScanner from "@/components/QRScanner";
 
 export default function Products() {
   const { products } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
+  const [showScanner, setShowScanner] = useState(false);
   
   const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -39,9 +43,22 @@ export default function Products() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+          <Button 
+            variant="outline"
+            onClick={() => setShowScanner(true)}
+          >
+            <Scan className="mr-2 h-4 w-4" />
+            Scan
+          </Button>
           <CreateProductDialog />
         </div>
       </div>
+
+      <Dialog open={showScanner} onOpenChange={setShowScanner}>
+        <DialogContent>
+          <QRScanner onClose={() => setShowScanner(false)} />
+        </DialogContent>
+      </Dialog>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((product) => (
