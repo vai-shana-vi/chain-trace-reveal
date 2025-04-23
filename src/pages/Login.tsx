@@ -1,4 +1,3 @@
-
 import { useApp } from "@/context/AppContext";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +16,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Check if user is already authenticated and redirect
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
@@ -35,7 +33,6 @@ export default function Login() {
           title: "Logged in successfully",
           description: "Welcome back to TransparentChain!",
         });
-        // Explicitly redirect after successful login
         navigate("/");
       } else {
         toast({
@@ -58,7 +55,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-900 via-violet-800 to-purple-700 relative overflow-hidden">
-      {/* Blockchain Effect Background */}
       <div className="absolute inset-0 w-full h-full">
         <div className="absolute w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,transparent_50%)]" />
         <div className="absolute w-full h-full animate-pulse-slow opacity-30">
@@ -83,7 +79,6 @@ export default function Login() {
       </div>
 
       <div className="w-full max-w-md space-y-8 px-4 z-10">
-        {/* Logo and Title with enhanced styling */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-lg mx-auto transform hover:scale-105 transition-all duration-300">
             <Package2 className="w-10 h-10 text-white" />
@@ -170,48 +165,40 @@ export default function Login() {
               </div>
               
               <div className="grid grid-cols-2 gap-3">
-                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-full bg-purple-500/20">
-                      <Building2 className="h-4 w-4 text-purple-300" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-white">Admin</p>
-                      <p className="text-xs text-purple-300">admin@transparentchain.com</p>
-                    </div>
+                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0 flex items-center">
+                  <div className="p-2 rounded-full bg-purple-500/20 mr-3">
+                    <Building2 className="h-4 w-4 text-purple-300" />
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <p className="text-sm font-medium text-white truncate">Admin</p>
+                    <p className="text-xs text-purple-300 truncate">admin@transparentchain.com</p>
                   </div>
                 </Card>
-                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-full bg-purple-500/20">
-                      <Package2 className="h-4 w-4 text-purple-300" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-white">Manufacturer</p>
-                      <p className="text-xs text-purple-300">manufacturer@transparentchain.com</p>
-                    </div>
+                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0 flex items-center">
+                  <div className="p-2 rounded-full bg-purple-500/20 mr-3">
+                    <Package2 className="h-4 w-4 text-purple-300" />
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <p className="text-sm font-medium text-white truncate">Manufacturer</p>
+                    <p className="text-xs text-purple-300 truncate">manufacturer@transparentchain.com</p>
                   </div>
                 </Card>
-                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-full bg-purple-500/20">
-                      <Building2 className="h-4 w-4 text-purple-300" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-white">Supplier</p>
-                      <p className="text-xs text-purple-300">supplier@transparentchain.com</p>
-                    </div>
+                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0 flex items-center">
+                  <div className="p-2 rounded-full bg-purple-500/20 mr-3">
+                    <Building2 className="h-4 w-4 text-purple-300" />
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <p className="text-sm font-medium text-white truncate">Supplier</p>
+                    <p className="text-xs text-purple-300 truncate">supplier@transparentchain.com</p>
                   </div>
                 </Card>
-                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-full bg-purple-500/20">
-                      <Users className="h-4 w-4 text-purple-300" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-white">Customer</p>
-                      <p className="text-xs text-purple-300">customer@example.com</p>
-                    </div>
+                <Card className="p-3 bg-white/5 hover:bg-white/10 transition-all border-0 flex items-center">
+                  <div className="p-2 rounded-full bg-purple-500/20 mr-3">
+                    <Users className="h-4 w-4 text-purple-300" />
+                  </div>
+                  <div className="flex-grow min-w-0">
+                    <p className="text-sm font-medium text-white truncate">Customer</p>
+                    <p className="text-xs text-purple-300 truncate">customer@example.com</p>
                   </div>
                 </Card>
               </div>
