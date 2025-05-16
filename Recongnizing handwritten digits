@@ -1,0 +1,55 @@
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.ensemble import RandomForestClassifier
+
+# Step 2: Load the dataset
+df = pd.read_csv('handwritten.csv')
+
+# Step 3: Inspect the dataset
+print(df.shape)
+print(df.head())
+
+# Step 4: Split into features (X) and target (y)
+X = df.drop('label', axis=1)  # Assuming 'label' column contains digit classes
+y = df['label']
+
+# Optional: Visualize one digit
+plt.imshow(X.iloc[0].values.reshape(28,28), cmap='gray')
+plt.title(f"Label: {y.iloc[0]}")
+plt.axis('off')
+plt.show()
+
+# Step 5: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 6: Normalize pixel values
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Step 7: Train a model (Random Forest)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train_scaled, y_train)
+
+# Step 8: Make predictions
+y_pred = model.predict(X_test_scaled)
+
+# Step 9: Evaluation
+print("Classification Report:\n")
+print(classification_report(y_test, y_pred))
+
+# Confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+plt.figure(figsize=(8,6))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.xlabel("Predicted")
+plt.ylabel("True")
+plt.title("Confusion Matrix")
+plt.show()
